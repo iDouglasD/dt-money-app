@@ -3,6 +3,7 @@ import { View } from "react-native";
 import { SignInSchema } from "./_validations/sign-in-schema";
 import { SignForm } from "./_components/sign-form";
 import { DismissKeyboardView } from "@/components/dismiss-keyboard-view";
+import { AuthHeader } from "@/components/auth-header";
 
 export function SignIn() {
   const signInForm = useForm<SignInSchema>()
@@ -15,6 +16,7 @@ export function SignIn() {
   return (
     <DismissKeyboardView>
       <View className="flex-1 w-[82%] self-center">
+        <AuthHeader />
         <FormProvider {...signInForm}>
           <SignForm />
         </FormProvider>
