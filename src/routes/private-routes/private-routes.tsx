@@ -1,4 +1,4 @@
-import { Home } from "@/screens/home/home";
+import { Home } from "@/screens/home";
 import { createStackNavigator } from "@react-navigation/stack";
 
 export type PrivateStackParamsList = {
