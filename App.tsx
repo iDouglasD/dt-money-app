@@ -1,9 +1,12 @@
 
 import { NavigationRoutes } from "@/routes/routes";
 import "./src/styles/global.css";
+import { AuthContextProvider } from "@/context/auth.context";
 
 export default function App() {
   return (
-    <NavigationRoutes />
+    <AuthContextProvider>
+      <NavigationRoutes />
+    </AuthContextProvider>
   );
 }
