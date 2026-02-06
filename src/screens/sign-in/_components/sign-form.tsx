@@ -6,20 +6,32 @@ import { Button } from "@/components/button";
 import { NavigationProp, useNavigation } from "@react-navigation/native";
 import { PublicStackParamsList } from "@/routes/public-routes/public-routes";
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useAuth } from "@/shared/hooks/use-auth";
+import { AxiosError } from "axios";
 
 
 export function SignForm() {
-  const { control, handleSubmit, formState: { errors, isSubmitting } } = useForm<SignInSchema>({
+  const { control, handleSubmit, formState: { isSubmitting } } = useForm<SignInSchema>({
     resolver: zodResolver(signInSchema),
     defaultValues: {
       email: "",
       password: "",
     }
   })
+  const { handleAuthenticate } = useAuth()
 
   const navigation = useNavigation<NavigationProp<PublicStackParamsList>>()
 
-  async function onSubmit({ email, password }: SignInSchema) { }
+  async function onSubmit({ email, password }: SignInSchema) {
+    try {
+      await handleAuthenticate({ email, password })
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        console.log(error.response?.data)
+      }
+      console.log(error)
+    }
+  }
 
   return (
     <>
