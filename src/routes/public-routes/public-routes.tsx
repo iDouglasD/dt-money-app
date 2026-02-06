@@ -1,5 +1,5 @@
-import { Register } from "@/screens/register/register";
-import { SignIn } from "@/screens/sign-in/sign-in";
+import { Register } from "@/screens/register";
+import { SignIn } from "@/screens/sign-in";
 import { createStackNavigator } from "@react-navigation/stack";
 
 export type PublicStackParamsList = {
