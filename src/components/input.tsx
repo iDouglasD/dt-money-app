@@ -59,7 +59,7 @@ export function Input<T extends FieldValues>({ control, name, label, leftIconNam
               secureTextEntry={showSecureText}
               onFocus={handleFocus}
               onEndEditing={handleFocus}
-              onChange={onChange}
+              onChangeText={onChange}
               {...props}
             />
             {

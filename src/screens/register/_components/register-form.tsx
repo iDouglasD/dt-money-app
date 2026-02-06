@@ -9,7 +9,7 @@ import { PublicStackParamsList } from "@/routes/public-routes/public-routes"
 import { zodResolver } from "@hookform/resolvers/zod"
 
 export function RegisterForm() {
-  const { control, handleSubmit, formState: { errors, isSubmitting } } = useForm<RegisterSchema>({
+  const { control, handleSubmit, formState: { isSubmitting } } = useForm<RegisterSchema>({
     resolver: zodResolver(registerSchema),
     defaultValues: {
       name: "",
