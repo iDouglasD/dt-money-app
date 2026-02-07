@@ -2,13 +2,14 @@
 import { Input } from "@/components/input"
 import { useForm } from "react-hook-form"
 import { registerSchema, RegisterSchema } from "../_validations/register-schema"
-import { Text, View } from "react-native"
+import { ActivityIndicator, Text, View } from "react-native"
 import { Button } from "@/components/button"
 import { NavigationProp, useNavigation } from "@react-navigation/native"
 import { PublicStackParamsList } from "@/routes/public-routes/public-routes"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { AxiosError } from "axios"
 import { useAuth } from "@/shared/hooks/use-auth"
+import { useErrorHandler } from "@/shared/hooks/use-error-handler"
+import { colors } from "@/shared/colors"
 
 export function RegisterForm() {
   const { control, handleSubmit, formState: { isSubmitting } } = useForm<RegisterSchema>({
@@ -21,6 +22,7 @@ export function RegisterForm() {
     }
   })
   const { handleRegister } = useAuth()
+  const { handleError } = useErrorHandler()
 
   const navigation = useNavigation<NavigationProp<PublicStackParamsList>>()
 
@@ -28,10 +30,10 @@ export function RegisterForm() {
     try {
       await handleRegister(data)
     } catch (error) {
-      if (error instanceof AxiosError) {
-        console.log(error.response?.data)
-      }
-      console.log(error)
+      handleError({
+        error,
+        defaultMessage: "An error occurred while trying to register."
+      })
     }
   }
 
@@ -69,7 +71,9 @@ export function RegisterForm() {
       />
       <View className="flex-1 justify-between mt-8 mb-6">
         <Button onPress={handleSubmit(onSubmit)} disabled={isSubmitting}>
-          Register
+          {
+            isSubmitting ? <ActivityIndicator color={colors.white} /> : "Register"
+          }
         </Button>
         <View>
           <Text className="my-6 text-gray-300 text-base">

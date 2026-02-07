@@ -1,6 +1,6 @@
 import { colors } from "@/shared/colors";
 import { useAuth } from "@/shared/hooks/use-auth";
-import { AxiosError } from "axios";
+import { useErrorHandler } from "@/shared/hooks/use-error-handler";
 import { useEffect } from "react";
 import { ActivityIndicator, Image } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
@@ -11,6 +11,7 @@ interface LoadingProps {
 
 export function Loading({ setLoading }: LoadingProps) {
   const { restoreAuthUserSession, handleSignOut } = useAuth()
+  const { handleError } = useErrorHandler()
 
   useEffect(() => {
     (async () => {
@@ -21,10 +22,10 @@ export function Loading({ setLoading }: LoadingProps) {
         }
       } catch (error) {
         await handleSignOut()
-        if (error instanceof AxiosError) {
-          console.log(error.response?.data)
-        }
-        console.log(error)
+        handleError({
+          error,
+          defaultMessage: "An error occurred while restoring your session."
+        })
       } finally {
         setLoading(false)
       }
