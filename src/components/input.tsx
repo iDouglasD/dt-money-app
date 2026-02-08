@@ -17,7 +17,7 @@ export function Input<T extends FieldValues>({ control, name, label, secureTextE
       name={name}
       control={control}
       render={({ field: { onChange, value }, fieldState: { error } }) => (
-        <View className="w-full mt-4">
+        <View className="w-full">
           {label && (
             <Text className="mb-2 mt-3 text-base text-gray-600">
               {label}

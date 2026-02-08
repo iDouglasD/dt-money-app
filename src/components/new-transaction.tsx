@@ -7,10 +7,12 @@ import { colors } from "@/shared/colors";
 import { useBottomSheet } from "@/shared/hooks/use-bottom-sheet";
 import { Input } from "./input";
 import { CurrencyInput } from "./currency-input";
+import { TransactionTypeSelect } from "./transaction-type-select";
+import { TransactionTypes } from "@/shared/enums/transaction-types";
 
 export const newTransactionSchema = z.object({
   description: z.string().min(1, "Description is required"),
-  typeId: z.number().min(1, "Type is required"),
+  typeId: z.enum(TransactionTypes),
   categoryId: z.number().min(1, "Category is required"),
   value: z.number().min(0.01, "Value must be greater than 0"),
 })
@@ -24,7 +26,7 @@ export function NewTransaction() {
     resolver: zodResolver(newTransactionSchema),
     defaultValues: {
       description: "",
-      typeId: 0,
+      typeId: TransactionTypes.REVENUE,
       categoryId: 0,
       value: 0,
     }
@@ -41,7 +43,8 @@ export function NewTransaction() {
         </Text>
         <MaterialIcons name="close" size={20} color={colors.gray["700"]} />
       </TouchableOpacity>
-      <View className="flex-1 mt-8 mb-8">
+
+      <View className="flex-1 my-8">
         <Input
           control={control}
           name="description"
@@ -54,6 +57,10 @@ export function NewTransaction() {
           delimiter="."
           separator=","
           precision={2}
+        />
+        <TransactionTypeSelect
+          control={control}
+          name="typeId"
         />
       </View>
     </View>
