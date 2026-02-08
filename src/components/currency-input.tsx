@@ -1,16 +1,33 @@
 import { Control, Controller, FieldValues, Path } from "react-hook-form";
-import { Text, TextInput, TextInputProps, View } from "react-native";
-import { colors } from "@/shared/colors";
+import { Text, View } from "react-native";
 import { ErrorMessage } from "./error-message";
 import clsx from "clsx";
+import CurrencyInputLib from "react-native-currency-input";
 
-interface InputProps<T extends FieldValues> extends TextInputProps {
+interface CurrencyInputProps<T extends FieldValues> {
   control: Control<T>;
   name: Path<T>;
   label?: string;
+  className?: string;
+  prefix?: string;
+  delimiter?: string;
+  separator?: string;
+  precision?: number;
+  minValue?: number;
 }
 
-export function Input<T extends FieldValues>({ control, name, label, secureTextEntry, className, ...props }: InputProps<T>) {
+export function CurrencyInput<T extends FieldValues>({
+  control,
+  name,
+  label,
+  prefix,
+  delimiter,
+  separator,
+  precision,
+  minValue = 0,
+  className,
+  ...props
+}: CurrencyInputProps<T>) {
 
   return (
     <Controller
@@ -23,11 +40,15 @@ export function Input<T extends FieldValues>({ control, name, label, secureTextE
               {label}
             </Text>
           )}
-          <TextInput
+          <CurrencyInputLib
             className={clsx("text-white text-lg h-[50px] bg-background-primary my-2 rounded-[6px] pl-4", className)}
             value={value}
-            placeholderTextColor={colors.gray[700]}
-            onChangeText={onChange}
+            onChangeValue={onChange}
+            prefix={prefix}
+            delimiter={delimiter}
+            separator={separator}
+            precision={precision}
+            minValue={minValue}
             {...props}
           />
           {error && <ErrorMessage message={error.message || ""} />}

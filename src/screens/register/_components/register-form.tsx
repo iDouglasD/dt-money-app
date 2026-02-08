@@ -1,5 +1,4 @@
 
-import { Input } from "@/components/input"
 import { useForm } from "react-hook-form"
 import { registerSchema, RegisterSchema } from "../_validations/register-schema"
 import { ActivityIndicator, Text, View } from "react-native"
@@ -10,6 +9,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useAuth } from "@/shared/hooks/use-auth"
 import { useErrorHandler } from "@/shared/hooks/use-error-handler"
 import { colors } from "@/shared/colors"
+import { AuthInput } from "@/components/auth-input"
 
 export function RegisterForm() {
   const { control, handleSubmit, formState: { isSubmitting } } = useForm<RegisterSchema>({
@@ -39,21 +39,21 @@ export function RegisterForm() {
 
   return (
     <>
-      <Input
+      <AuthInput
         control={control}
         name="name"
         label="NAME"
         placeholder="Your name"
         leftIconName="person"
       />
-      <Input
+      <AuthInput
         control={control}
         name="email"
         label="EMAIL"
         placeholder="mail@exemple.br"
         leftIconName="mail-outline"
       />
-      <Input
+      <AuthInput
         control={control}
         name="password"
         label="PASSWORD"
@@ -61,7 +61,7 @@ export function RegisterForm() {
         leftIconName="lock-outline"
         secureTextEntry
       />
-      <Input
+      <AuthInput
         control={control}
         name="confirmPassword"
         label="CONFIRM PASSWORD"

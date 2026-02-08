@@ -1,6 +1,6 @@
 import { useForm } from "react-hook-form"
 import { signInSchema, SignInSchema } from "../_validations/sign-in-schema"
-import { Input } from "@/components/input"
+import { AuthInput } from "@/components/auth-input"
 import { ActivityIndicator, Text, View } from "react-native";
 import { Button } from "@/components/button";
 import { NavigationProp, useNavigation } from "@react-navigation/native";
@@ -37,14 +37,14 @@ export function SignForm() {
 
   return (
     <>
-      <Input
+      <AuthInput
         control={control}
         name="email"
         label="EMAIL"
         placeholder="mail@exemple.br"
         leftIconName="mail-outline"
       />
-      <Input
+      <AuthInput
         control={control}
         name="password"
         label="PASSWORD"

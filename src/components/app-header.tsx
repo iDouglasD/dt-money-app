@@ -3,6 +3,7 @@ import { useAuth } from "@/shared/hooks/use-auth";
 import { useBottomSheet } from "@/shared/hooks/use-bottom-sheet";
 import { MaterialIcons } from "@expo/vector-icons";
 import { Image, Text, TouchableOpacity, View } from "react-native";
+import { NewTransaction } from "./new-transaction";
 
 export function AppHeader() {
   const { handleSignOut } = useAuth()
@@ -25,10 +26,7 @@ export function AppHeader() {
 
       <TouchableOpacity
         className="bg-accent-brand w-[130px] items-center justify-center rounded-xl h-[50px]"
-        onPress={() => openBottomSheet(
-          <Text>Formulário</Text>,
-          0
-        )}
+        onPress={() => openBottomSheet(<NewTransaction />, 0)}
       >
         <Text className="text-white font-bold text-sm">
           New transaction
