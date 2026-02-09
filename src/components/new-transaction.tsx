@@ -1,5 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
+import { FormProvider, useForm } from "react-hook-form";
 import { Text, TouchableOpacity, View } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons"
 import z from "zod";
@@ -9,6 +9,7 @@ import { Input } from "./input";
 import { CurrencyInput } from "./currency-input";
 import { TransactionTypeSelect } from "./transaction-type-select";
 import { TransactionTypes } from "@/shared/enums/transaction-types";
+import { CategoryModal } from "./category-modal";
 
 export const newTransactionSchema = z.object({
   description: z.string().min(1, "Description is required"),
@@ -22,7 +23,7 @@ export type NewTransactionSchema = z.infer<typeof newTransactionSchema>
 export function NewTransaction() {
   const { closeBottomSheet } = useBottomSheet()
 
-  const { control } = useForm<NewTransactionSchema>({
+  const newTransactionSchemaForm = useForm<NewTransactionSchema>({
     resolver: zodResolver(newTransactionSchema),
     defaultValues: {
       description: "",
@@ -31,6 +32,8 @@ export function NewTransaction() {
       value: 0,
     }
   })
+
+  const { control } = newTransactionSchemaForm
 
   return (
     <View className="px-8 py-5">
@@ -58,6 +61,9 @@ export function NewTransaction() {
           separator=","
           precision={2}
         />
+        <FormProvider {...newTransactionSchemaForm}>
+          <CategoryModal />
+        </FormProvider>
         <TransactionTypeSelect
           control={control}
           name="typeId"
