@@ -12,6 +12,8 @@ import { TransactionTypes } from "@/shared/enums/transaction-types";
 import { CategoryModal } from "./category-modal";
 import { useErrorHandler } from "@/shared/hooks/use-error-handler";
 import { Button } from "./button";
+import { useTransaction } from "@/shared/hooks/use-transaction";
+import { useSnackbar } from "@/shared/hooks/use-snackbar";
 
 export const newTransactionSchema = z.object({
   description: z.string().min(1, "Description is required"),
@@ -25,6 +27,8 @@ export type NewTransactionSchema = z.infer<typeof newTransactionSchema>
 export function NewTransaction() {
   const { closeBottomSheet } = useBottomSheet()
   const { handleError } = useErrorHandler()
+  const { createTransaction } = useTransaction()
+  const { notify } = useSnackbar()
 
   const newTransactionSchemaForm = useForm<NewTransactionSchema>({
     resolver: zodResolver(newTransactionSchema),
@@ -35,10 +39,16 @@ export function NewTransaction() {
     }
   })
 
-  const { control, handleSubmit, formState: { isSubmitting } } = newTransactionSchemaForm
+  const { control, handleSubmit, formState: { isSubmitting }, reset } = newTransactionSchemaForm
 
   async function onSubmit(data: NewTransactionSchema) {
     try {
+      await createTransaction(data)
+      notify({
+        message: "Transaction created successfully!",
+        type: 'success'
+      })
+      reset()
     } catch (error) {
       handleError({
         error,
