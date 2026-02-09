@@ -5,9 +5,10 @@ import { Controller, useFormContext } from "react-hook-form";
 import { FlatList, Modal, Text, TouchableOpacity, TouchableWithoutFeedback, View } from "react-native";
 import { NewTransactionSchema } from "./new-transaction";
 import Checkbox from "expo-checkbox";
+import { ErrorMessage } from "./error-message";
 
 export function CategoryModal() {
-  const { control, watch } = useFormContext<NewTransactionSchema>()
+  const { control, watch, formState: { errors } } = useFormContext<NewTransactionSchema>()
   const [isVisible, setIsVisible] = useState(false)
 
   const { categories } = useTransaction()
@@ -32,6 +33,9 @@ export function CategoryModal() {
           {selectedCategoryId ? selectedCategory?.name : "Category"}
         </Text>
       </TouchableOpacity>
+      {errors.categoryId &&
+        <ErrorMessage message={errors.categoryId.message || ""} />
+      }
 
       <Modal visible={isVisible} transparent animationType="slide">
         <TouchableWithoutFeedback onPress={toggleModal}>
