@@ -1,4 +1,3 @@
-import { useTransaction } from "@/shared/hooks/use-transaction";
 import clsx from "clsx";
 import { useState } from "react";
 import { Controller, useFormContext } from "react-hook-form";
@@ -6,15 +5,21 @@ import { FlatList, Modal, Text, TouchableOpacity, TouchableWithoutFeedback, View
 import { NewTransactionSchema } from "./new-transaction";
 import Checkbox from "expo-checkbox";
 import { ErrorMessage } from "./error-message";
+import { useQuery } from "@tanstack/react-query";
+import { getTransactionCategories } from "@/shared/services/transaction.service";
 
 export function CategoryModal() {
   const { control, watch, formState: { errors } } = useFormContext<NewTransactionSchema>()
   const [isVisible, setIsVisible] = useState(false)
 
-  const { categories } = useTransaction()
-
   const selectedCategoryId = watch("categoryId")
-  const selectedCategory = categories.find((category) => category.id === selectedCategoryId)
+
+  const { data: categories } = useQuery({
+    queryKey: ['categories'],
+    queryFn: getTransactionCategories,
+  })
+
+  const selectedCategory = categories?.find((category) => category.id === selectedCategoryId)
 
   function toggleModal() {
     setIsVisible((prev) => !prev)

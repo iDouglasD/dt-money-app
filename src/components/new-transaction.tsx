@@ -12,8 +12,9 @@ import { TransactionTypes } from "@/shared/enums/transaction-types";
 import { CategoryModal } from "./category-modal";
 import { useErrorHandler } from "@/shared/hooks/use-error-handler";
 import { Button } from "./button";
-import { useTransaction } from "@/shared/hooks/use-transaction";
 import { useSnackbar } from "@/shared/hooks/use-snackbar";
+import { useMutation } from "@tanstack/react-query";
+import { createTransaction } from "@/shared/services/transaction.service";
 
 export const newTransactionSchema = z.object({
   description: z.string().min(1, "Description is required"),
@@ -27,7 +28,6 @@ export type NewTransactionSchema = z.infer<typeof newTransactionSchema>
 export function NewTransaction() {
   const { closeBottomSheet } = useBottomSheet()
   const { handleError } = useErrorHandler()
-  const { createTransaction } = useTransaction()
   const { notify } = useSnackbar()
 
   const newTransactionSchemaForm = useForm<NewTransactionSchema>({
@@ -41,20 +41,25 @@ export function NewTransaction() {
 
   const { control, handleSubmit, formState: { isSubmitting }, reset } = newTransactionSchemaForm
 
-  async function onSubmit(data: NewTransactionSchema) {
-    try {
-      await createTransaction(data)
+  const { mutate: createTransactionFn } = useMutation({
+    mutationFn: createTransaction,
+    onSuccess: () => {
       notify({
         message: "Transaction created successfully!",
         type: 'success'
       })
       reset()
-    } catch (error) {
+    },
+    onError: (error: unknown) => {
       handleError({
         error,
         defaultMessage: "An error occurred while trying to create a new transaction."
       })
-    }
+    },
+  })
+
+  async function onSubmit(data: NewTransactionSchema) {
+    createTransactionFn(data)
   }
 
   return (
