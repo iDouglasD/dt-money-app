@@ -1,8 +1,25 @@
 import { NewTransactionSchema } from "@/components/new-transaction";
 import { api } from "../api/axios";
-import { TransactionCategoryResponse } from "../interfaces/https/transaction-category-response";
-import { TransactionCreateResponse } from "../interfaces/https/transaction-create-response";
+import { GetTransactionsResponse, TransactionCategoryResponse, TransactionCreateResponse } from "../interfaces/https/transaction-interface";
+import qs from "qs";
 
+interface GetTransactionsParams {
+  page: number;
+  perPage: number;
+  from?: Date,
+  to?: Date,
+  searchText?: string;
+  typeId?: number
+  categoryId?: number;
+}
+
+export async function getTransactions(params: GetTransactionsParams): Promise<GetTransactionsResponse> {
+  const { data } = await api.get<GetTransactionsResponse>("/transaction", {
+    params,
+    paramsSerializer: (params) => qs.stringify(params, { arrayFormat: "repeat" })
+  })
+  return data;
+}
 
 export async function getTransactionCategories(): Promise<TransactionCategoryResponse[]> {
   const { data } = await api.get<TransactionCategoryResponse[]>("/transaction/categories")

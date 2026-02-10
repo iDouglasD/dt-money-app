@@ -1,33 +1,28 @@
-import { AppHeader } from "@/components/app-header";
-import { useErrorHandler } from "@/shared/hooks/use-error-handler";
-import { useTransaction } from "@/shared/hooks/use-transaction";
-import { useEffect } from "react";
+import { FlatList } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { ListHeader } from "./_components/list-header";
+import { getTransactions } from "@/shared/services/transaction.service";
+import { useQuery } from "@tanstack/react-query";
 
 export function Home() {
-  const { getCategories } = useTransaction()
-  const { handleError } = useErrorHandler()
+  const { data: transactions, isPending: isPendingTransactions } = useQuery({
+    queryKey: ['transactions'],
+    queryFn: () => getTransactions({
+      page: 1,
+      perPage: 10,
+    }),
+  })
 
-  async function handleTransactionCategories() {
-    try {
-      await getCategories()
-    } catch (error) {
-      handleError({
-        error,
-        defaultMessage: "An error occurred while trying to load transaction categories."
-      })
-    }
-  }
-
-  useEffect(() => {
-    (async () => {
-      await handleTransactionCategories()
-    })()
-  }, [])
+  const totalTransactions = transactions?.totalTransactions
 
   return (
     <SafeAreaView className="flex-1 bg-background-primary">
-      <AppHeader />
+      <FlatList
+        className="bg-background-secondary"
+        ListHeaderComponent={() => <ListHeader totalTransactions={totalTransactions} />}
+        data={[]}
+        renderItem={() => <></>}
+      />
     </SafeAreaView>
   )
 }
