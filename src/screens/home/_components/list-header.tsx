@@ -1,14 +1,13 @@
 import { AppHeader } from "@/components/app-header";
 import { ScrollView, View } from "react-native";
-import { TransactionCard } from "./transaction-card";
 import { TransactionTypes } from "@/shared/enums/transaction-types";
-import { TotalTransactions } from "@/shared/interfaces/https/transaction-interface";
+import { useTransactions } from "@/shared/hooks/use-transactions";
+import { TransactionHeaderCard } from "./transaction-header-card";
 
-interface ListHeaderProps {
-  totalTransactions?: TotalTransactions
-}
 
-export function ListHeader({ totalTransactions }: ListHeaderProps) {
+export function ListHeader() {
+  const { totalTransactions } = useTransactions()
+
   const totalRevenue = totalTransactions?.revenue ?? 0
   const totalExpense = totalTransactions?.expense ?? 0
   const total = totalTransactions?.total ?? 0
@@ -23,15 +22,15 @@ export function ListHeader({ totalTransactions }: ListHeaderProps) {
           horizontal
           showsHorizontalScrollIndicator={false}
         >
-          <TransactionCard
+          <TransactionHeaderCard
             type={TransactionTypes.EXPENSE}
             amount={totalExpense}
           />
-          <TransactionCard
+          <TransactionHeaderCard
             type={TransactionTypes.REVENUE}
             amount={totalRevenue}
           />
-          <TransactionCard
+          <TransactionHeaderCard
             type="total"
             amount={total}
           />

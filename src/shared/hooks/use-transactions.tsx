@@ -10,8 +10,13 @@ export function useTransactions() {
     }),
   })
 
+  const transactions = transactionsResult?.data ?? []
+  const totalTransactions = transactionsResult?.totalTransactions
+
   return {
     transactionsResult,
+    transactions,
+    totalTransactions,
     isPendingTransactions,
   }
 }
