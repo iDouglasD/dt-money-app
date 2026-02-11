@@ -3,14 +3,13 @@ import { MaterialIcons } from "@expo/vector-icons";
 import { Text, View } from "react-native";
 import { useTransactions } from "@/shared/hooks/use-transactions";
 import { format } from "date-fns";
-import { ca } from "zod/v4/locales";
 import { ICONS } from "../_strategies/card-color";
 import { CARD_DATA } from "../_strategies/card-data";
 
-export type TransactionCardType = TransactionTypes | "total"
+export type TransactionHeaderCardType = TransactionTypes | "total"
 
 interface TransactionHeaderCardProps {
-  type: TransactionCardType
+  type: TransactionHeaderCardType
   amount: number
 }
 

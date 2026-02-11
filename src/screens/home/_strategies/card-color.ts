@@ -1,14 +1,14 @@
 import { TransactionTypes } from "@/shared/enums/transaction-types"
-import { TransactionCardType } from "../_components/transaction-card"
 import { colors } from "@/shared/colors"
 import { MaterialIcons } from "@expo/vector-icons"
+import { TransactionHeaderCardType } from "../_components/transaction-header-card"
 
 interface Icons {
   name: keyof typeof MaterialIcons.glyphMap
   color: string
 }
 
-export const ICONS: Record<TransactionCardType, Icons> = {
+export const ICONS: Record<TransactionHeaderCardType, Icons> = {
   [TransactionTypes.REVENUE]: {
     color: colors["accent-brand-light"],
     name: "arrow-circle-up"
