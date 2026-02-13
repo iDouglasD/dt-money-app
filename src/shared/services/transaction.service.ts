@@ -35,3 +35,7 @@ export async function createTransaction({ categoryId, description, typeId, value
   })
   return data;
 }
+
+export async function deleteTransaction(transactionId: number): Promise<void> {
+  await api.delete(`/transaction/${transactionId}`)
+}

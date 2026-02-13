@@ -5,7 +5,8 @@ import { MaterialIcons } from "@expo/vector-icons";
 import clsx from "clsx";
 import { format } from "date-fns";
 import { Text, View } from "react-native";
-import Swipeable from "react-native-gesture-handler/ReanimatedSwipeable";
+import Swipeable from 'react-native-gesture-handler/Swipeable';
+import { RightAction } from "./right-action";
 
 interface TransactionCardProps {
   transaction: Transaction
@@ -24,6 +25,8 @@ export function TransactionCard({ transaction }: TransactionCardProps) {
         width: "90%",
         marginBottom: 16
       }}
+      renderRightActions={() => <RightAction transactionId={transaction.id} />}
+      overshootRight={false}
     >
       <View className="h-[140] bg-background-tertiary rounded-[6] p-6">
         <Text className="text-white text-base">
