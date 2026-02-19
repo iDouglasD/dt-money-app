@@ -2,14 +2,14 @@ import clsx from "clsx";
 import { useState } from "react";
 import { Controller, useFormContext } from "react-hook-form";
 import { FlatList, Modal, Text, TouchableOpacity, TouchableWithoutFeedback, View } from "react-native";
-import { NewTransactionSchema } from "./new-transaction";
 import Checkbox from "expo-checkbox";
 import { ErrorMessage } from "./error-message";
 import { useQuery } from "@tanstack/react-query";
 import { getTransactionCategories } from "@/shared/services/transaction.service";
+import { TransactionSchema } from "@/screens/home/_validations/transaction-schema";
 
 export function CategoryModal() {
-  const { control, watch, formState: { errors } } = useFormContext<NewTransactionSchema>()
+  const { control, watch, formState: { errors } } = useFormContext<TransactionSchema>()
   const [isVisible, setIsVisible] = useState(false)
 
   const selectedCategoryId = watch("categoryId")
