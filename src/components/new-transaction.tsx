@@ -7,7 +7,7 @@ import { useBottomSheet } from "@/shared/hooks/use-bottom-sheet";
 import { useErrorHandler } from "@/shared/hooks/use-error-handler";
 import { Button } from "./button";
 import { useSnackbar } from "@/shared/hooks/use-snackbar";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { createTransaction } from "@/shared/services/transaction.service";
 import { TransactionSchema, transactionSchema } from "@/screens/home/_validations/transaction-schema";
 import { TransactionForm } from "./transaction-form";
@@ -17,6 +17,7 @@ export function NewTransaction() {
   const { closeBottomSheet } = useBottomSheet()
   const { handleError } = useErrorHandler()
   const { notify } = useSnackbar()
+  const queryClient = useQueryClient();
 
   const newTransactionSchemaForm = useForm<TransactionSchema>({
     resolver: zodResolver(transactionSchema),
@@ -32,6 +33,7 @@ export function NewTransaction() {
   const { mutate: createTransactionFn } = useMutation({
     mutationFn: createTransaction,
     onSuccess: () => {
+      queryClient.refetchQueries({ queryKey: ['transactions'] })
       notify({
         message: "Transaction created successfully!",
         type: 'success'
