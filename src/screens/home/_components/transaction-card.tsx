@@ -7,6 +7,7 @@ import { format } from "date-fns";
 import { Text, View } from "react-native";
 import Swipeable from 'react-native-gesture-handler/Swipeable';
 import { RightAction } from "./right-action";
+import { LeftAction } from "./left-action";
 
 interface TransactionCardProps {
   transaction: Transaction
@@ -26,7 +27,9 @@ export function TransactionCard({ transaction }: TransactionCardProps) {
         marginBottom: 16
       }}
       renderRightActions={() => <RightAction transactionId={transaction.id} />}
+      renderLeftActions={() => <LeftAction transaction={transaction} />}
       overshootRight={false}
+      overshootLeft={false}
     >
       <View className="h-[140] bg-background-tertiary rounded-[6] p-6">
         <Text className="text-white text-base">
