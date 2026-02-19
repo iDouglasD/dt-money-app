@@ -36,6 +36,7 @@ export function UpdateTransaction({ transaction }: UpdateTransactionProps) {
   const { mutate: updateTransactionFn } = useMutation({
     mutationFn: updateTransaction,
     onSuccess: () => {
+      closeBottomSheet()
       queryClient.refetchQueries({ queryKey: ['transactions'] })
       notify({
         message: "Transaction updated successfully!",
