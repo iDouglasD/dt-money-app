@@ -1,27 +1,58 @@
 import { useQuery } from "@tanstack/react-query"
 import { getTransactions } from "../services/transaction.service"
 import { useTransaction } from "./use-transaction"
+import { useEffect } from "react"
 
 export function useGetTransactions() {
-  const { pagination } = useTransaction()
+  const { pagination, setTransactionList } = useTransaction()
 
-  const { page, perPage, totalRows } = pagination
+  const { page, perPage } = pagination
 
-  const { data: transactionsResult, isPending: isPendingTransactions } = useQuery({
-    queryKey: ['transactions', page, perPage, totalRows],
+  const {
+    data: transactionsResult,
+    isPending: isPendingTransactions,
+    isLoading: IsLoadingTransactions,
+    refetch: refetchTransactions
+  } = useQuery({
+    queryKey: ['transactions'],
     queryFn: () => getTransactions({
       page,
       perPage,
-    }),
+    })
   })
 
   const transactions = transactionsResult?.data ?? []
+  const totalPages = transactionsResult?.totalPages ?? 0
   const totalTransactions = transactionsResult?.totalTransactions
 
+  useEffect(() => {
+    if (transactionsResult) {
+      const isLastPage = pagination.page > totalPages
+      if (!isLastPage) {
+        refetchTransactions()
+      }
+    }
+  }, [pagination])
+
+  useEffect(() => {
+    const hasTransactions = transactionsResult && transactions.length > 0
+
+    if (hasTransactions && !IsLoadingTransactions) {
+      setTransactionList((prev) => {
+        const newTransactions = transactions.filter(
+          (transaction) => !prev.some((t) => t.id === transaction.id)
+        )
+        return [...prev, ...newTransactions]
+      })
+    }
+  }, [transactionsResult])
+
   return {
+    totalPages,
     transactionsResult,
     transactions,
     totalTransactions,
     isPendingTransactions,
+    IsLoadingTransactions
   }
 }
