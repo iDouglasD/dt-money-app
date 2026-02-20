@@ -11,7 +11,7 @@ export function useGetTransactions() {
   const {
     data: transactionsResult,
     isPending: isPendingTransactions,
-    isLoading: IsLoadingTransactions,
+    isRefetching: isRefetchingTransactions,
     refetch: refetchTransactions
   } = useQuery({
     queryKey: ['transactions'],
@@ -37,7 +37,7 @@ export function useGetTransactions() {
   useEffect(() => {
     const hasTransactions = transactionsResult && transactions.length > 0
 
-    if (hasTransactions && !IsLoadingTransactions) {
+    if (hasTransactions && !isRefetchingTransactions) {
       setTransactionList((prev) => {
         const newTransactions = transactions.filter(
           (transaction) => !prev.some((t) => t.id === transaction.id)
@@ -53,6 +53,6 @@ export function useGetTransactions() {
     transactions,
     totalTransactions,
     isPendingTransactions,
-    IsLoadingTransactions
+    isRefetchingTransactions
   }
 }
