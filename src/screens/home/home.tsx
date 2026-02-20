@@ -4,10 +4,13 @@ import { ListHeader } from "./_components/list-header";
 import { TransactionCard } from "./_components/transaction-card";
 import { useTransaction } from "@/shared/hooks/use-transaction";
 import { useGetTransactions } from "@/shared/hooks/use-get-transactions";
+import { EmptyList } from "./_components/empty-list";
 
 export function Home() {
   const { setPagination, transactionList } = useTransaction()
-  const { IsLoadingTransactions, totalPages } = useGetTransactions()
+  const { isPendingTransactions, IsLoadingTransactions, totalPages } = useGetTransactions()
+
+  const isLoadingList = isPendingTransactions || IsLoadingTransactions
 
   return (
     <SafeAreaView className="flex-1 bg-background-primary">
@@ -17,6 +20,7 @@ export function Home() {
         keyExtractor={({ id }) => `transaction-${id}`}
         ListHeaderComponent={<ListHeader />}
         renderItem={({ item }) => <TransactionCard transaction={item} />}
+        ListEmptyComponent={!isLoadingList ? <EmptyList /> : null}
         onEndReachedThreshold={0.5}
         onEndReached={() => {
           if (!IsLoadingTransactions) {
