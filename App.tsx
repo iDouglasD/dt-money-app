@@ -7,6 +7,7 @@ import { Snackbar } from "@/components/snackbar";
 import { BottomSheetContextProvider } from "@/context/bottom-sheet.context";
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import { ReactQueryProvider } from "@/shared/lib/react-query";
+import { TransactionContextProvider } from "@/context/transaction.context";
 
 export default function App() {
   return (
@@ -14,10 +15,12 @@ export default function App() {
       <ReactQueryProvider>
         <SnackbarContextProvider>
           <AuthContextProvider>
-            <BottomSheetContextProvider>
-              <NavigationRoutes />
-              <Snackbar />
-            </BottomSheetContextProvider>
+            <TransactionContextProvider>
+              <BottomSheetContextProvider>
+                <NavigationRoutes />
+                <Snackbar />
+              </BottomSheetContextProvider>
+            </TransactionContextProvider>
           </AuthContextProvider>
         </SnackbarContextProvider>
       </ReactQueryProvider>

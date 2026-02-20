@@ -1,12 +1,12 @@
 import { AppHeader } from "@/components/app-header";
 import { ScrollView, View } from "react-native";
 import { TransactionTypes } from "@/shared/enums/transaction-types";
-import { useTransactions } from "@/shared/hooks/use-transactions";
+import { useGetTransactions } from "@/shared/hooks/use-get-transactions";
 import { TransactionHeaderCard } from "./transaction-header-card";
 
 
 export function ListHeader() {
-  const { totalTransactions } = useTransactions()
+  const { totalTransactions } = useGetTransactions()
 
   const totalRevenue = totalTransactions?.revenue ?? 0
   const totalExpense = totalTransactions?.expense ?? 0

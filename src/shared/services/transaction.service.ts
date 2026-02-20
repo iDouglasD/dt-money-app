@@ -3,6 +3,13 @@ import { api } from "../api/axios";
 import { GetTransactionsResponse, TransactionCategoryResponse, TransactionCreateResponse } from "../interfaces/https/transaction-interface";
 import qs from "qs";
 
+export interface Pagination {
+  page: number;
+  perPage: number;
+  totalRows?: number;
+  totalPages: number;
+}
+
 interface GetTransactionsParams {
   page: number;
   perPage: number;
