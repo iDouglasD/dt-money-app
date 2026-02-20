@@ -5,6 +5,8 @@ import { useTransactions } from "@/shared/hooks/use-transactions";
 import { format } from "date-fns";
 import { ICONS } from "../_strategies/card-color";
 import { CARD_DATA } from "../_strategies/card-data";
+import { moneyMapper } from "@/shared/utils/money-mapper";
+import clsx from "clsx";
 
 export type TransactionHeaderCardType = TransactionTypes | "total"
 
@@ -26,8 +28,11 @@ export function TransactionHeaderCard({ type, amount }: TransactionHeaderCardPro
   const isNotTotalCard = type !== "total"
 
   return (
-    <View className={`bg-${cardData.bgColor} min-w-[280] rounded-[6] px-8 py-6 justify-between mr-6`}>
-      <View className="flex-row justify-between items-center mb-1">
+    <View className={clsx(`bg-${cardData.bgColor} min-w-[280] rounded-[6] px-8 py-6 justify-between mr-6`,
+      type === "total" && "mr-12"
+
+    )}>
+      <View className="flex-row justify-between items-center">
         <Text className="text-white text-base">
           {cardData.label}
         </Text>
@@ -39,7 +44,7 @@ export function TransactionHeaderCard({ type, amount }: TransactionHeaderCardPro
       </View>
       <View>
         <Text className="text-2xl text-gray-400 font-bold">
-          R$ {amount.toFixed(2).replace(".", ",")}
+          {moneyMapper(amount)}
         </Text>
         {
           isNotTotalCard && (

@@ -1,4 +1,4 @@
-import { NewTransactionSchema } from "@/components/new-transaction";
+import { TransactionSchema } from "@/screens/home/_validations/transaction-schema";
 import { api } from "../api/axios";
 import { GetTransactionsResponse, TransactionCategoryResponse, TransactionCreateResponse } from "../interfaces/https/transaction-interface";
 import qs from "qs";
@@ -26,7 +26,7 @@ export async function getTransactionCategories(): Promise<TransactionCategoryRes
   return data;
 }
 
-export async function createTransaction({ categoryId, description, typeId, value }: NewTransactionSchema): Promise<TransactionCreateResponse> {
+export async function createTransaction({ categoryId, description, typeId, value }: TransactionSchema): Promise<TransactionCreateResponse> {
   const { data } = await api.post<TransactionCreateResponse>("/transaction", {
     categoryId,
     description,
@@ -35,6 +35,15 @@ export async function createTransaction({ categoryId, description, typeId, value
   })
   return data;
 }
+
+
+export async function updateTransaction({ ...rest }: TransactionSchema): Promise<TransactionCreateResponse> {
+  const { data } = await api.put<TransactionCreateResponse>('/transaction', {
+    ...rest
+  })
+  return data;
+}
+
 
 export async function deleteTransaction(transactionId: number): Promise<void> {
   await api.delete(`/transaction/${transactionId}`)

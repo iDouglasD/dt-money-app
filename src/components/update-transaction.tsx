@@ -8,48 +8,51 @@ import { useErrorHandler } from "@/shared/hooks/use-error-handler";
 import { Button } from "./button";
 import { useSnackbar } from "@/shared/hooks/use-snackbar";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { createTransaction } from "@/shared/services/transaction.service";
+import { createTransaction, updateTransaction } from "@/shared/services/transaction.service";
 import { TransactionSchema, transactionSchema } from "@/screens/home/_validations/transaction-schema";
 import { TransactionForm } from "./transaction-form";
+import { Transaction } from "@/shared/interfaces/https/transaction-interface";
+
+interface UpdateTransactionProps {
+  transaction: Transaction
+}
 
 
-export function NewTransaction() {
+export function UpdateTransaction({ transaction }: UpdateTransactionProps) {
   const { closeBottomSheet } = useBottomSheet()
   const { handleError } = useErrorHandler()
   const { notify } = useSnackbar()
   const queryClient = useQueryClient();
 
-  const newTransactionSchemaForm = useForm<TransactionSchema>({
+  const updateTransactionSchemaForm = useForm<TransactionSchema>({
     resolver: zodResolver(transactionSchema),
     defaultValues: {
-      description: "",
-      categoryId: 0,
-      value: 0,
+      ...transaction
     }
   })
 
-  const { handleSubmit, formState: { isSubmitting }, reset } = newTransactionSchemaForm
+  const { handleSubmit, formState: { isSubmitting } } = updateTransactionSchemaForm
 
-  const { mutate: createTransactionFn } = useMutation({
-    mutationFn: createTransaction,
+  const { mutate: updateTransactionFn } = useMutation({
+    mutationFn: updateTransaction,
     onSuccess: () => {
+      closeBottomSheet()
       queryClient.refetchQueries({ queryKey: ['transactions'] })
       notify({
-        message: "Transaction created successfully!",
+        message: "Transaction updated successfully!",
         type: 'success'
       })
-      reset()
     },
     onError: (error: unknown) => {
       handleError({
         error,
-        defaultMessage: "An error occurred while trying to create a new transaction."
+        defaultMessage: "An error occurred while trying to update the transaction."
       })
     },
   })
 
   async function onSubmit(data: TransactionSchema) {
-    createTransactionFn(data)
+    updateTransactionFn(data)
   }
 
   return (
@@ -59,17 +62,17 @@ export function NewTransaction() {
         onPress={closeBottomSheet}
       >
         <Text className="text-white text-xl font-bold">
-          New Transaction
+          Edit Transaction
         </Text>
         <MaterialIcons name="close" size={20} color={colors.gray["700"]} />
       </TouchableOpacity>
-      <FormProvider {...newTransactionSchemaForm}>
+      <FormProvider {...updateTransactionSchemaForm}>
         <TransactionForm />
       </FormProvider>
       <View className="mb-4">
         <Button onPress={handleSubmit(onSubmit)} disabled={isSubmitting}>
           {
-            isSubmitting ? <ActivityIndicator color={colors.white} /> : "Register"
+            isSubmitting ? <ActivityIndicator color={colors.white} /> : "Save Changes"
           }
         </Button>
       </View>
