@@ -1,7 +1,7 @@
 import { TransactionTypes } from "@/shared/enums/transaction-types";
 import { MaterialIcons } from "@expo/vector-icons";
 import { Text, View } from "react-native";
-import { useTransactions } from "@/shared/hooks/use-transactions";
+import { useGetTransactions } from "@/shared/hooks/use-get-transactions";
 import { format } from "date-fns";
 import { ICONS } from "../_strategies/card-color";
 import { CARD_DATA } from "../_strategies/card-data";
@@ -16,7 +16,7 @@ interface TransactionHeaderCardProps {
 }
 
 export function TransactionHeaderCard({ type, amount }: TransactionHeaderCardProps) {
-  const { transactionsResult } = useTransactions()
+  const { transactionsResult } = useGetTransactions()
 
   const iconData = ICONS[type]
   const cardData = CARD_DATA[type]

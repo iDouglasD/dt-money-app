@@ -1,11 +1,11 @@
 import { FlatList } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { ListHeader } from "./_components/list-header";
-import { useTransactions } from "@/shared/hooks/use-transactions";
+import { useGetTransactions } from "@/shared/hooks/use-get-transactions";
 import { TransactionCard } from "./_components/transaction-card";
 
 export function Home() {
-  const { transactions } = useTransactions()
+  const { transactions } = useGetTransactions()
 
   return (
     <SafeAreaView className="flex-1 bg-background-primary">
